@@ -1,4 +1,5 @@
 import turtle as t
+import math
 import time
 
 t.speed('fastest')
@@ -24,6 +25,7 @@ def drawball(x, y, distance=20):
       t.right(90)
    t.forward(distance)
 
+# starts at -300; dims: 10x50
 def draw_goal(y_start, is_left):
 
    t.seth(0)
@@ -46,6 +48,9 @@ def draw_goal(y_start, is_left):
    t.right(90)
    t.forward(50)
 
+def torad(deg):
+   return deg/360 * (3.14/180)
+
 i = 0
 def perform_logic(x, y, goal1_y, goal2_y, angle):
    '''
@@ -60,20 +65,33 @@ def perform_logic(x, y, goal1_y, goal2_y, angle):
       #time.sleep(2)
 
    if x > 300:
-      print('switching dir', x,y,goal1_y, goal2_y, angle)
-      angle = 260
+      print('switching dir1', x,y,goal1_y, goal2_y, angle)
+      x -= 2
+      angle = 180
    elif x <= -300:
-      print('switching dir', x,y,goal1_y, goal2_y, angle)
-      angle = 90
+      print('switching dir2', x,y,goal1_y, goal2_y, angle)
+      angle = 0
 
-   if angle >= 0 and angle <= 180:
+   #h = 1 always
+
+   rise = math.sin(torad(angle))  # o/h
+   run = math.cos(torad(angle)) # a/h
+
+   if angle >= 0 and angle <= 90:
       #print('forward', angle)
-      x += 2
-      y += 2
+      #x += 1
+      #y += 1*y_over_x
+      y += rise
+      x += run
    elif angle >= 180:
       #print('backward', angle)
-      x -= 2
-      y -= 2
+      # x -= 1
+      # y -= 1
+
+      #x -= 1
+      #y += y_over_x
+      x -= run
+      y -= rise
 
    return x, y, goal1_y, goal2_y, angle
 
@@ -115,7 +133,7 @@ while True:
    t.hideturtle()
    run()
    t.update()
-   time.sleep(0.05)
+   time.sleep(0.02)
    t.clear()
    #t.mainloop()
 
