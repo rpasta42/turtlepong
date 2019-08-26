@@ -1,4 +1,5 @@
 import turtle as t
+import sys
 import math
 import time
 
@@ -60,15 +61,31 @@ def perform_logic(x, y, goal1_y, goal2_y, angle):
    '''
    global i
    i+= 1
+   x = round(x, 2)
+   y = round(y, 2)
+   angle = round(angle, 2)
+
    if i % 40 == 0:
       print(x,y,goal1_y, goal2_y, angle)
       #time.sleep(2)
 
    if x > 300:
-      print('switching dir1', x,y,goal1_y, goal2_y, angle)
-      x -= 2
+      on_paddle1 = goal1_y + 15 >= y
+      on_paddle2 = goal1_y - 50 <= y # 15 = half ball size; 50 = paddle size
+      on_paddle = on_paddle1 and on_paddle2
+      if not on_paddle:
+         print('Right Lost!')
+         sys.exit(-1)
+      print('switching dir1', on_paddle1, on_paddle2, x,y,goal1_y, goal2_y, angle)
+      #x -= 2
       angle = 180
    elif x <= -300:
+      on_paddle1 = goal2_y + 15 >= y
+      on_paddle2 = goal2_y - 50 <= y # 15 = half ball size; 50 = paddle size
+      on_paddle = on_paddle1 and on_paddle2
+      if not on_paddle:
+         print('Left Lost!')
+         sys.exit(-1)
       print('switching dir2', x,y,goal1_y, goal2_y, angle)
       angle = 0
 
@@ -81,8 +98,8 @@ def perform_logic(x, y, goal1_y, goal2_y, angle):
       #print('forward', angle)
       #x += 1
       #y += 1*y_over_x
-      y += rise
-      x += run
+      y += rise*2
+      x += run*2
    elif angle >= 180:
       #print('backward', angle)
       # x -= 1
@@ -90,8 +107,8 @@ def perform_logic(x, y, goal1_y, goal2_y, angle):
 
       #x -= 1
       #y += y_over_x
-      x -= run
-      y -= rise
+      x -= run*2
+      y -= rise*2
 
    return x, y, goal1_y, goal2_y, angle
 
