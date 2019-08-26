@@ -50,7 +50,20 @@ def draw_goal(y_start, is_left):
    t.forward(50)
 
 def torad(deg):
-   return deg/360 * (3.14/180)
+   return deg * (3.14/180)
+
+def paddle_detector(goal1_y, y):
+
+   print(f'====goal1 {goal1_y} ball {y}')
+
+   if goal1_y - y >= 25:
+      print('tilt2')
+      return 180+30
+   if goal1_y - y <= -10:
+      print('tilt1')
+      return 180-30
+   print('no tilt')
+   return 180
 
 i = 0
 def perform_logic(x, y, goal1_y, goal2_y, angle):
@@ -79,6 +92,7 @@ def perform_logic(x, y, goal1_y, goal2_y, angle):
       print('switching dir1', on_paddle1, on_paddle2, x,y,goal1_y, goal2_y, angle)
       #x -= 2
       angle = 180
+      angle = paddle_detector(goal1_y, y)
    elif x <= -300:
       on_paddle1 = goal2_y + 15 >= y
       on_paddle2 = goal2_y - 50 <= y # 15 = half ball size; 50 = paddle size
@@ -94,21 +108,8 @@ def perform_logic(x, y, goal1_y, goal2_y, angle):
    rise = math.sin(torad(angle))  # o/h
    run = math.cos(torad(angle)) # a/h
 
-   if angle >= 0 and angle <= 90:
-      #print('forward', angle)
-      #x += 1
-      #y += 1*y_over_x
-      y += rise*2
-      x += run*2
-   elif angle >= 180:
-      #print('backward', angle)
-      # x -= 1
-      # y -= 1
-
-      #x -= 1
-      #y += y_over_x
-      x -= run*2
-      y -= rise*2
+   y += rise*2
+   x += run*2
 
    return x, y, goal1_y, goal2_y, angle
 
@@ -150,7 +151,7 @@ while True:
    t.hideturtle()
    run()
    t.update()
-   time.sleep(0.02)
+   time.sleep(0.01)
    t.clear()
    #t.mainloop()
 
