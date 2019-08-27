@@ -5,8 +5,11 @@ import time
 import game_globals as GLOBALS
 import helpers
 import physics
-import drawing
 import keyboard_input
+import drawing
+import gl_drawing
+
+
 
 
 GAME_STATE = {
@@ -50,5 +53,10 @@ def main():
 
       drawing.main_loop_update()
 
-main()
+#main()
+
+
+gl_drawing.init()
+
+
 
