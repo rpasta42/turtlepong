@@ -1,4 +1,5 @@
 import math
+import sys
 import helpers
 import game_globals as GLOBALS
 
@@ -9,11 +10,28 @@ def paddle_detector(goal1_y, y):
    if goal1_y - y >= 25:
       print('tilt2')
       return 180+30
-   if goal1_y - y <= -10:
+   if goal1_y - y >= 10:
       print('tilt1')
       return 180-30
    print('no tilt')
    return 180
+
+
+def detect_walls(x, y, angle):
+
+   if y > 300 or y < -300:
+      print('hitting wall', x, y, angle)
+
+   if y < -300 and 270 >= angle >= 180:
+      # buttom left quad
+      new_angle = angle - 180
+      print('new_angle1:', new_angle)
+      new_angle = 180 - 90 - new_angle
+      print('new_angle2:', new_angle)
+      print('old angle:', angle)
+      angle -= new_angle
+
+   return angle
 
 i = 0
 def perform_logic(GAME_STATE):
@@ -35,11 +53,11 @@ def perform_logic(GAME_STATE):
    angle = round(angle, 2)
 
    if i % 40 == 0:
-      print(x,y,goal1_y, goal2_y, angle)
+      print(f'x:{x} y:{y} goal1_y:{goal1_y} goal2_y:{goal2_y} angle:{angle}')
 
    if x + GLOBALS.BALL_LENGTH > GLOBALS.RIGHT_GOAL_X:
-      on_paddle1 = goal1_y + 15 >= y
-      on_paddle2 = goal1_y - 50 <= y # 15 = half ball size; 50 = paddle size
+      on_paddle1 = goal1_y + GLOBALS.BALL_LENGTH >= y
+      on_paddle2 = goal1_y - GLOBALS.GOAL_LENGTH <= y # 15 = half ball size; 50 = paddle size
       on_paddle = on_paddle1 and on_paddle2
       if not on_paddle:
          print('Right Lost!')
@@ -49,8 +67,8 @@ def perform_logic(GAME_STATE):
       angle = 180
       angle = paddle_detector(goal1_y, y)
    elif x - GLOBALS.GOAL_WIDTH <= GLOBALS.LEFT_GOAL_X:  # left ball edge touching ball
-      on_paddle1 = goal2_y + 15 >= y
-      on_paddle2 = goal2_y - 50 <= y # 15 = half ball size; 50 = paddle size
+      on_paddle1 = goal2_y + GLOBALS.BALL_LENGTH >= y
+      on_paddle2 = goal2_y - GLOBALS.GOAL_LENGTH <= y # 15 = half ball size; 50 = paddle size
       on_paddle = on_paddle1 and on_paddle2
       if not on_paddle:
          print('Left Lost!')
@@ -58,6 +76,7 @@ def perform_logic(GAME_STATE):
       print('switching dir2', x,y,goal1_y, goal2_y, angle)
       angle = 0
 
+   angle = detect_walls(x, y, angle)
    #h = 1 always
 
    rise = math.sin(helpers.torad(angle))  # o/h
