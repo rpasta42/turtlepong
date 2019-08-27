@@ -1,12 +1,16 @@
 import turtle as t
+import time
 
 import game_globals as GLOBALS
 
-def init():
+def init(key_bindings):
    t.speed('fastest')
    t.delay(0)
    t.hideturtle()
    t.tracer(False)
+   for key, event_listener in key_bindings.items():
+      t.onkey(event_listener, key)
+   t.listen()
 
 def drawball(x, y, length):
    t.pencolor("white")
@@ -39,5 +43,19 @@ def draw_goal(y_start, is_left):
    t.forward(GLOBALS.GOAL_WIDTH)
    t.right(90)
    t.forward(GLOBALS.GOAL_LENGTH)
+
+def print_fps(num_frames):
+   #t.reset()
+   #t.hideturtle()
+   t.pencolor("white")
+   t.setpos(-250, -250)
+   t.pencolor('black')
+   t.write(f'FPS {num_frames}', font=("Arial", 20, "normal"))
+
+def main_loop_update():
+   t.update()
+   time.sleep(0.01)
+   t.clear()
+
 
 
