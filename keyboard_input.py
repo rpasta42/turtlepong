@@ -1,3 +1,4 @@
+import game_globals as GLOBALS
 
 def init_keyboard(GAME_STATE):
    def on_key_down():

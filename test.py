@@ -25,28 +25,30 @@ def run():
    drawing.draw_goal(GAME_STATE['goal1_y'], False)
    drawing.draw_goal(GAME_STATE['goal2_y'], True)
 
-key_bindings = keyboard_input.init_keyboard()
-drawing.init(key_bindings)
 
+def main():
 
-import time
-num_frames = 0
-last_time = time.perf_counter()
-fps = 0
-while True:
+   key_bindings = keyboard_input.init_keyboard(GAME_STATE)
+   drawing.init(key_bindings)
 
-   run()
+   num_frames = 0
+   last_time = time.perf_counter()
+   fps = 0
 
-   # FPS stuff
-   new_time = time.perf_counter()
-   if new_time - last_time >= 1:
-      last_time = new_time
-      fps = num_frames
-      num_frames = 0
-   if True:
-      print_fps(fps)
-   num_frames += 1
+   while True:
+      run()
 
-   drawing.main_loop_update()
+      # FPS stuff
+      new_time = time.perf_counter()
+      if new_time - last_time >= 1:
+         last_time = new_time
+         fps = num_frames
+         num_frames = 0
+      if True:
+         drawing.print_fps(fps)
+      num_frames += 1
 
+      drawing.main_loop_update()
+
+main()
 
