@@ -42,18 +42,35 @@ t.onkey(on_key_s, 's')
 drawing.init()
 t.listen()
 
-def print_fps(i):
-   #t.write('hello', font=("Arial", 25, "normal"))
-   pass
+def print_fps(num_frames):
+   #t.reset()
+   #t.hideturtle()
+   t.pencolor("white")
+   t.setpos(-250, -250)
+   t.pencolor('black')
+   t.write(f'FPS {num_frames}', font=("Arial", 20, "normal"))
 
-i = 0
+import time
+num_frames = 0
+last_time = time.perf_counter()
+fps = 0
 while True:
-   print_fps(i)
-   i += 1
 
-   t.reset()
+   #t.reset()
    t.hideturtle()
    run()
+
+
+   # FPS stuff
+   new_time = time.perf_counter()
+   if new_time - last_time >= 1:
+      last_time = new_time
+      fps = num_frames
+      num_frames = 0
+   if True or num_frames % 10 in [0, 1, 2, 3, 4, 5]:
+      print_fps(fps)
+   num_frames += 1
+
    t.update()
    time.sleep(0.01)
    t.clear()
