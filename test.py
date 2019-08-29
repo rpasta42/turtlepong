@@ -7,7 +7,7 @@ import helpers
 import physics
 import keyboard_input
 import drawing
-import gl_drawing
+#import gl_drawing
 
 
 
@@ -53,10 +53,7 @@ def main():
 
       drawing.main_loop_update()
 
-#main()
-
-
-gl_drawing.init()
-
+main()
+#gl_drawing.init()
 
 
